@@ -1,0 +1,78 @@
+<apex:page controller="VacanciesController" lightningStylesheets="true">
+    <apex:form >
+        <apex:pageBlock title="Filter by Status">
+            <apex:commandButton action="{!showNew}" reRender="vacancies_table" value="New"/>
+            <apex:commandButton action="{!showInProcess}" reRender="vacancies_table" value="In-Process"/>
+            <apex:commandButton action="{!showCancelled}" reRender="vacancies_table" value="Cancelled"/>
+            <apex:commandButton action="{!showClosed}" reRender="vacancies_table" value="Closed"/>
+        </apex:pageBlock>
+        <apex:pageBlock title="Vacancies" id="vacancies_table">
+            <apex:pageBlockButtons id="buttons_block">
+                <apex:outputLink styleClass="btn" value="{!URLFOR($Action.Vacancy__c.New)}">
+                    New Vacancy
+                </apex:outputLink>
+                <apex:commandButton action="{!cancelSelected}"
+                        reRender="vacancies_table"
+                        rendered="{!customFilterByStatus == 'In-Process' || customFilterByStatus == 'New'}"
+                        value="Cancel Vacancy(ies)"
+                />
+                <apex:commandButton action="{!approveSelected}"
+                        reRender="vacancies_table"
+                        rendered="{!customFilterByStatus == 'In-Process'}"
+                        value="Approve Candidate(s)"
+                />
+                <apex:commandButton action="{!removeSelected}"
+                                    reRender="vacancies_table"
+                                    rendered="{!customFilterByStatus == 'In-Process'}"
+                                    value="Remove Candidate(s)"
+                />
+            </apex:pageBlockButtons>
+            <apex:pageMessages />
+            <apex:pageBlockTable value="{!vacancies}" var="v">
+                <apex:column rendered="{!customFilterByStatus == 'In-Process' || customFilterByStatus == 'New'}">
+                    <apex:inputCheckbox value="{!v.checked}"/>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">
+                        Vacancy
+                    </apex:facet>
+                    <apex:outputLink value="{!URLFOR($Action.Vacancy__c.View, v.vacancy.Id)}">
+                        {!v.vacancy.Title__c}
+                    </apex:outputLink>
+                </apex:column>
+                <apex:column rendered="{!customFilterByStatus == 'Closed'}">
+                    <apex:facet name="header">
+                        Worker
+                    </apex:facet>
+                    <apex:outputLink value="{!URLFOR($Action.Candidate__c.View, v.vacancy.Candidate__c)}">
+                        {!v.vacancy.Candidate__r.FirstName__c} {!v.vacancy.Candidate__r.LastName__c}
+                    </apex:outputLink>
+                </apex:column>
+                <apex:column rendered="{!customFilterByStatus == 'In-Process'}">
+                    <apex:facet name="header">
+                        Possible Candidates
+                    </apex:facet>
+                    <apex:dataTable value="{!v.connections}" var="c">
+                        <apex:column >
+                            <apex:inputCheckbox value="{!c.checked}"/>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">
+                                Name
+                            </apex:facet>
+                            <apex:outputLink value="{!URLFOR($Action.Candidate__c.View, c.connection.Candidate__c)}">
+                                {!c.connection.Candidate__r.FirstName__c} {!c.connection.Candidate__r.LastName__c}
+                            </apex:outputLink>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">
+                                E-mail
+                            </apex:facet>
+                            {!c.connection.Candidate__r.Email__c}
+                        </apex:column>
+                    </apex:dataTable>
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

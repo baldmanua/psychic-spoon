@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Candidate__c</fullName>
+    <externalId>false</externalId>
+    <label>Candidate</label>
+    <lookupFilter>
+        <active>true</active>
+        <errorMessage>Candidate has to be Validated by HR</errorMessage>
+        <filterItems>
+            <field>Candidate__c.Status__c</field>
+            <operation>equals</operation>
+            <value>Validated by HR</value>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>Candidate__c</referenceTo>
+    <relationshipLabel>Vacancies</relationshipLabel>
+    <relationshipName>Candidates_to_Vacancies</relationshipName>
+    <relationshipOrder>0</relationshipOrder>
+    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <trackTrending>false</trackTrending>
+    <type>MasterDetail</type>
+    <writeRequiresMasterRead>true</writeRequiresMasterRead>
+</CustomField>

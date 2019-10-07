@@ -1,0 +1,32 @@
+<apex:page standardController="Vacancy__c" extensions="CandidatesAsignmentController" lightningStylesheets="true" rendered="{!currentVacancy.Status__c == 'In-Process'}">
+    <apex:form id="candidate_list">
+        <apex:pageBlock title="Candidates">
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!removeConnections}" reRender="candidate_list, actions" value="Remove"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockTable value="{! connections }" var="c" rendered="{! connections.size > 0 }" columns="3">
+                <apex:column >
+                    <apex:inputCheckbox value="{!c.checked}"/>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">
+                        Candidate name
+                    </apex:facet>
+                    <apex:outputLink target="_blank"
+                                     value="{!URLFOR($Action.Candidate__c.View, c.connection.Candidate__r.Id)}">
+                        {! c.connection.Candidate__r.FirstName__c } {! c.connection.Candidate__r.LastName__c }
+                    </apex:outputLink>
+                </apex:column>
+                <apex:column value="{! c.connection.Candidate__r.Email__c }"/>
+                <apex:column value="{! c.connection.Candidate__r.Salary__c }"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+    <apex:form id="actions">
+        <apex:pageBlock title="Actions">
+            <apex:pageMessages />
+            <apex:inputField value="{! newRelation.Candidate__c }"/>
+            <apex:commandButton action="{!asignCandidate}" reRender="candidate_list, actions" value="Asign"/>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

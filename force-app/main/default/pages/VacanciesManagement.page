@@ -1,0 +1,30 @@
+<apex:page controller="VacanciesManagementController" lightningStylesheets="true">
+    <apex:form >
+        <apex:pageBlock title="Vacancy List ({!customFilterByResponsible})" id="vacancy_list">
+            <apex:commandButton action="{!showAll}" reRender="vacancy_list" value="Show All"/>
+            <apex:commandButton action="{!showUnselected}" reRender="vacancy_list" value="Show Unselected"/>
+            <apex:commandButton action="{!showSelected}" reRender="vacancy_list" value="Show Selected"/>
+            <apex:pageBlockTable value="{! vacancyList }" var="v" rendered="{! vacancyList.size > 0 }">
+                <apex:column >
+                    <apex:facet name="header">
+                        Vacancy name
+                    </apex:facet>
+                    <apex:outputLink value="{!URLFOR($Action.Vacancy__c.View, v.Id)}">{! v.Title__c }</apex:outputLink>
+                </apex:column>
+                <apex:column value="{! v.Level__c }"/>
+                <apex:column value="{! v.DaysOpen__c }"/>
+                <apex:column value="{! v.DaysLeftToClose__c }"/>
+                <apex:column >
+                    <apex:facet name="header">
+                        Responsible
+                    </apex:facet>
+                    <apex:inputField value="{! v.Responsible__c }"/>
+                </apex:column>
+            </apex:pageBlockTable>
+            <apex:pageBlockSection rendered="{! vacancyList.size <= 0 }">
+                There is no records of chosen type.
+            </apex:pageBlockSection>
+            <apex:commandButton action="{! saveList }" reRender="vacancy_list" value="Save" />
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

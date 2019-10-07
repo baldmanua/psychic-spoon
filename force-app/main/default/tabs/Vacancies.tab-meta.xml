@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Vacancies approvement for managers</description>
+    <label>Vacancies</label>
+    <mobileReady>false</mobileReady>
+    <motif>Custom90: Scales</motif>
+    <page>Vacancies</page>
+</CustomTab>

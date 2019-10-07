@@ -1,0 +1,30 @@
+<apex:page standardController="Candidate__c" extensions="VacanciesAsignmentController" lightningStylesheets="true" rendered="{!currentCandidate.Status__c == 'Validated by HR'}">
+    <apex:form id="vacancy_list">
+        <apex:pageBlock title="Vacancies">
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!removeConnections}" reRender="vacancy_list, actions" value="Remove"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockTable value="{! connections }" var="c" rendered="{! connections.size > 0 }" columns="3">
+                <apex:column >
+                    <apex:inputCheckbox value="{!c.checked}"/>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">
+                        Vacancy
+                    </apex:facet>
+                    <apex:outputLink target="_blank"
+                                     value="{!URLFOR($Action.Vacancy__c.View, c.connection.Vacancy__r.Id)}">
+                        {! c.connection.Vacancy__r.Title__c }
+                    </apex:outputLink>
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+    <apex:form id="actions">
+        <apex:pageBlock title="Actions">
+            <apex:pageMessages />
+            <apex:inputField value="{! newRelation.Vacancy__c }"/>
+            <apex:commandButton action="{!asignVacancy}" reRender="vacancy_list, actions" value="Asign"/>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>
